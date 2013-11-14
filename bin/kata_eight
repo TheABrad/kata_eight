@@ -26,7 +26,7 @@ optparse = OptionParser.new do |opts|
 	  options[:words] = num
 	end
 
-    options[:file] = "bin/words"
+    options[:file] = "/usr/share/dict/words"
 	opts.on("-d", "--dictionary FILE", "Specify the file that you want to use for the word list. Default is bin/words") do |file|
 	  options[:file] = file
 	end
@@ -39,7 +39,11 @@ end
 
 optparse.parse!
 
-words = File.readlines(options[:file]).map(&:strip).take(Integer(options[:words]))
+if File.exist?(options[:file])
+  words = File.readlines(options[:file]).map(&:strip).take(Integer(options[:words]))
+else
+  puts "Word file doesn't exist, please provide another"
+end
 
 # Word finder options for Readable, Fast, and Extendable
 if options[:finder]=="readable"
