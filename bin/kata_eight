@@ -27,7 +27,7 @@ optparse = OptionParser.new do |opts|
 	end
 
     options[:file] = "/usr/share/dict/words"
-	opts.on("-d", "--dictionary FILE", "Specify the file that you want to use for the word list. Default is bin/words") do |file|
+	opts.on("-d", "--dictionary FILE", "Specify the file that you want to use for the word list. Default is usr/share/dict/words") do |file|
 	  options[:file] = file
 	end
 

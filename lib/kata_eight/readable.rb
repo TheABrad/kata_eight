@@ -5,14 +5,14 @@ class Readable
     
     words = words.select { |word| word.length <= 6 }
     
-  	words.each do |word_one|
-  	  words.each do |word_two|
+  	words.each do |left_word|
+  	  words.each do |right_word|
         
-  	  	concatenated_word = word_one + word_two
+  	  	concatenated_word = left_word + right_word
 
   	  	if concatenated_word.length == 6
   	  	  if words.include?(concatenated_word)
-            concatenated_string = "#{word_one} + #{word_two} => #{concatenated_word}"
+            concatenated_string = "#{left_word} + #{right_word} => #{concatenated_word}"
             concatenated_word_list.push(concatenated_string)
   	  	  end
   	  	end
