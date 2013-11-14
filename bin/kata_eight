@@ -1,0 +1,64 @@
+#!/usr/bin/env ruby
+
+require 'kata_eight'
+require 'optparse'
+
+options = {}
+
+optparse = OptionParser.new do |opts|
+	opts.banner = "Usage: kata_eight [options]"
+
+	opts.on("-r", "--readable", "Run the readable version of this code kata") do
+	  options[:finder] = "readable"
+	end
+
+	opts.on("-f", "--fast", "Run the fast version of this code kata") do
+	  options[:finder] = "fast"
+	end
+
+	opts.on("-e", "--extendable MIN_WORD_LEN,MAX_WORD_LEN", Array, "Run the extendable version of this code kata") do |len|
+	  options[:finder] = "extendable"
+	  options[:word_length] = len
+	end
+
+    options[:words]=10000
+	opts.on("-w", "--words NUMBER_OF_WORDS", "Specify how many words you want to match. Default is 10,000") do |num|
+	  options[:words] = num
+	end
+
+    options[:file] = "bin/words"
+	opts.on("-d", "--dictionary FILE", "Specify the file that you want to use for the word list. Default is bin/words") do |file|
+	  options[:file] = file
+	end
+
+	opts.on("-h", "--help", "Display this screen") do
+	  puts opts
+	  exit
+	end
+end
+
+optparse.parse!
+
+words = File.readlines(options[:file]).map(&:strip).take(Integer(options[:words]))
+
+# Word finder options for Readable, Fast, and Extendable
+if options[:finder]=="readable"
+  word_list = Readable.find_words(words)
+elsif options[:finder]=="fast"
+  word_list = Fast.find_words(words)
+elsif options[:finder]=="extendable"
+  extendable = Extendable.new(Integer(options[:word_length][0]),Integer(options[:word_length][1]))
+  word_list = extendable.find_words(words)
+else
+  puts "Please choose version of the code kata --help for help"
+end
+
+# Write to a file
+if word_list
+  output = File.open("output.txt", 'w')
+  output.write(options[:finder].capitalize + " word finder")
+  output.write("\n\n")
+  output.puts word_list
+  output.close()
+  puts "Word list written to output.txt!"
+end
